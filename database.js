@@ -45,7 +45,7 @@ export async function updateUser(id, name, email, password){
 
 export async function deleteUser(id){
     
-    if(getUserByID(id) == null) return false;
+    console.log(await getUserByID(id))
     await pool.query(`
     DELETE FROM usuario 
     WHERE id = ?`, [id]);
@@ -83,6 +83,7 @@ export async function getCategoryByID(id){
     SELECT * 
     FROM categoria 
     WHERE id = ?`, [id]);
+    if (result.length == 0) return false
     return result[0];
 }
 
@@ -99,7 +100,7 @@ export async function updateCategory(id, name){
         
     await pool.query(`
     UPDATE categoria 
-    SET name = ?,
+    SET nome = ?
     WHERE id = ?`, [name, id]);
     return getCategoryByID(id);
 }
@@ -136,6 +137,7 @@ export async function getCompromiseByID(id){
     SELECT * 
     FROM compromisso 
     WHERE id = ?`, [id]);
+    if (result.length == 0) return false
     return result[0];
 }
 
@@ -190,6 +192,7 @@ export async function getReminderByID(id){
     SELECT * 
     FROM lembrete 
     WHERE id = ?`, [id]);
+    if (result.length == 0) return false
     return result[0];
 }
 
@@ -205,7 +208,7 @@ export async function insertReminder(id_compromise, init_date, sound){
 export async function updateReminder(id,id_compromise, init_date, sound){
         
     await pool.query(`
-    UPDATE compromisso 
+    UPDATE lembrete 
     SET id_compromisso = ?, data_notificacao = ?, som_notificacao = ?
     WHERE id = ?`, [id_compromise, init_date, sound, id]);
     return getReminderByID(id);
@@ -226,3 +229,4 @@ export async function deleteAllReminders(){
     DELETE FROM lembrete`);
     return true;
 }
+
